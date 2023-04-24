@@ -73,15 +73,11 @@ use crate::optimization::FunctionOrder;
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[derive(Debug, Clone, Eq, PartialEq)]
 /// Solver options for Logistic regression. Right now only LBFGS solver is supported.
+#[derive(Default)]
 pub enum LogisticRegressionSolverName {
     /// Limited-memory Broyden–Fletcher–Goldfarb–Shanno method, see [LBFGS paper](http://users.iems.northwestern.edu/~nocedal/lbfgsb.html)
+    #[default]
     LBFGS,
-}
-
-impl Default for LogisticRegressionSolverName {
-    fn default() -> Self {
-        LogisticRegressionSolverName::LBFGS
-    }
 }
 
 /// Logistic Regression parameters
@@ -636,19 +632,19 @@ mod tests {
 
         assert!((g[0] + 33.000068218163484).abs() < std::f64::EPSILON);
 
-        let f = objective.f(&vec![1., 2., 3., 4., 5., 6., 7., 8., 9.]);
+        let f = objective.f(&[1., 2., 3., 4., 5., 6., 7., 8., 9.]);
 
         assert!((f - 408.0052230582765).abs() < std::f64::EPSILON);
 
         let objective_reg = MultiClassObjectiveFunction {
             x: &x,
-            y: y.clone(),
+            y: y,
             k: 3,
             alpha: 1.0,
             _phantom_t: PhantomData,
         };
 
-        let f = objective_reg.f(&vec![1., 2., 3., 4., 5., 6., 7., 8., 9.]);
+        let f = objective_reg.f(&[1., 2., 3., 4., 5., 6., 7., 8., 9.]);
         assert!((f - 487.5052).abs() < 1e-4);
 
         objective_reg.df(&mut g, &vec![1., 2., 3., 4., 5., 6., 7., 8., 9.]);
@@ -697,18 +693,18 @@ mod tests {
         assert!((g[1] - 10.239000702928523).abs() < std::f64::EPSILON);
         assert!((g[2] - 3.869294270156324).abs() < std::f64::EPSILON);
 
-        let f = objective.f(&vec![1., 2., 3.]);
+        let f = objective.f(&[1., 2., 3.]);
 
         assert!((f - 59.76994756647412).abs() < std::f64::EPSILON);
 
         let objective_reg = BinaryObjectiveFunction {
             x: &x,
-            y: y.clone(),
+            y: y,
             alpha: 1.0,
             _phantom_t: PhantomData,
         };
 
-        let f = objective_reg.f(&vec![1., 2., 3.]);
+        let f = objective_reg.f(&[1., 2., 3.]);
         assert!((f - 62.2699).abs() < 1e-4);
 
         objective_reg.df(&mut g, &vec![1., 2., 3.]);

@@ -379,16 +379,16 @@ mod tests {
         let mut iter = parameters.into_iter();
         let next = iter.next().unwrap();
         assert_eq!(next.n_components, 2);
-        assert_eq!(next.use_correlation_matrix, true);
+        assert!(next.use_correlation_matrix);
         let next = iter.next().unwrap();
         assert_eq!(next.n_components, 4);
-        assert_eq!(next.use_correlation_matrix, true);
+        assert!(next.use_correlation_matrix);
         let next = iter.next().unwrap();
         assert_eq!(next.n_components, 2);
-        assert_eq!(next.use_correlation_matrix, false);
+        assert!(!next.use_correlation_matrix);
         let next = iter.next().unwrap();
         assert_eq!(next.n_components, 4);
-        assert_eq!(next.use_correlation_matrix, false);
+        assert!(!next.use_correlation_matrix);
         assert!(iter.next().is_none());
     }
 

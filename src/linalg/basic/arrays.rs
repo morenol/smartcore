@@ -1736,7 +1736,7 @@ mod tests {
         let r = Vec::<f32>::rand(4);
         assert!(r.iterator(0).all(|&e| e <= 1f32));
         assert!(r.iterator(0).all(|&e| e >= 0f32));
-        assert!(r.iterator(0).map(|v| *v).sum::<f32>() > 0f32);
+        assert!(r.iterator(0).copied().sum::<f32>() > 0f32);
     }
 
     #[test]
@@ -1954,7 +1954,7 @@ mod tests {
             DenseMatrix::from_2d_array(&[&[1, 3], &[2, 4]])
         );
         assert_eq!(
-            DenseMatrix::concatenate_2d(&[&a.clone(), &b.clone()], 0),
+            DenseMatrix::concatenate_2d(&[&a, &b], 0),
             DenseMatrix::from_2d_array(&[&[1, 2], &[3, 4], &[5, 6], &[7, 8]])
         );
         assert_eq!(
@@ -2025,7 +2025,7 @@ mod tests {
         let r = DenseMatrix::<f32>::rand(2, 2);
         assert!(r.iterator(0).all(|&e| e <= 1f32));
         assert!(r.iterator(0).all(|&e| e >= 0f32));
-        assert!(r.iterator(0).map(|v| *v).sum::<f32>() > 0f32);
+        assert!(r.iterator(0).copied().sum::<f32>() > 0f32);
     }
 
     #[test]

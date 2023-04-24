@@ -144,20 +144,15 @@ impl<TX: Number + PartialOrd, TY: Number + Ord, X: Array2<TX>, Y: Array1<TY>>
 
 /// The function to measure the quality of a split.
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub enum SplitCriterion {
     /// [Gini index](../decision_tree_classifier/index.html)
+    #[default]
     Gini,
     /// [Entropy](../decision_tree_classifier/index.html)
     Entropy,
     /// [Classification error](../decision_tree_classifier/index.html)
     ClassificationError,
-}
-
-impl Default for SplitCriterion {
-    fn default() -> Self {
-        SplitCriterion::Gini
-    }
 }
 
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
@@ -901,15 +896,13 @@ mod tests {
     )]
     #[test]
     fn gini_impurity() {
+        assert!((impurity(&SplitCriterion::Gini, &[7, 3], 10) - 0.42).abs() < std::f64::EPSILON);
         assert!(
-            (impurity(&SplitCriterion::Gini, &vec![7, 3], 10) - 0.42).abs() < std::f64::EPSILON
-        );
-        assert!(
-            (impurity(&SplitCriterion::Entropy, &vec![7, 3], 10) - 0.8812908992306927).abs()
+            (impurity(&SplitCriterion::Entropy, &[7, 3], 10) - 0.8812908992306927).abs()
                 < std::f64::EPSILON
         );
         assert!(
-            (impurity(&SplitCriterion::ClassificationError, &vec![7, 3], 10) - 0.3).abs()
+            (impurity(&SplitCriterion::ClassificationError, &[7, 3], 10) - 0.3).abs()
                 < std::f64::EPSILON
         );
     }
